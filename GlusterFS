@@ -13,10 +13,10 @@
   #then make xfs file system
 	mkfs.xfs /dev/sdb1
 	
-  #create a directory for your gluster node
-	mkdir -p /gluster/bricknodeX   #NOTE:replace x with your node number
+  #create a directory and mount it on each gluster server node
+	mkdir -p /data/glusterfs/cputprovol1/brick1   
 	
-	echo '/dev/sdb1 /glusterfs/bricknodeX xfs defaults 1 2' >> /etc/fstab #replace X with node number
+	echo '/dev/sdb1 /data/glusterfs/cputprovol1/brick1 xfs defaults 1 2' >> /etc/fstab 
 	mount -a && mount
 
 
@@ -33,13 +33,13 @@ sudo apt-get update
 	
 	
 	# after you create all the gluster nodes (here it's Gnode1, Gnode2, node3)
-	sudo gluster volume create CputProVolume replica 3 transport tcp \
-	  Gnode1:/glusterfs/bricknode1/brick \
-	  Gnode2:/glusterfs/bricknode2/brick \
-	  node3:/glusterfs/bricknode3/brick \
+	sudo gluster volume create cputprovol1 replica 3 transport tcp \
+	  Gnode1:/data/glusterfs/cputprovol1/brick1/brick \
+	  Gnode2:/data/glusterfs/cputprovol1/brick1/brick \
+	  ...
 	  force
 	  
-	  sudo su -c 'echo "localhost:/CputProVolume /cputdata glusterfs defaults,_netdev,backupvolfile-server=$(hostname) 0 0" >> /etc/fstab'
+	  sudo su -c 'echo "localhost:/cputprovol1 /cputdata glusterfs defaults,_netdev,backupvolfile-server=$(hostname) 0 0" >> /etc/fstab'
 	
 	
 	mount -a
@@ -54,5 +54,5 @@ sudo apt-get update
 #	node1:/CputProVolume /cputdata glusterfs defaults,_netdev 0 0
 	
 # On each client nodes 
-	mount -t glusterfs Gnode:/CputProVolume /cputdata
+	mount -t glusterfs Gnode:/cputprovol1 /cputdata
   
