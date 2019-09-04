@@ -20,7 +20,7 @@
 	mount -a && mount
 
 
-sudo add-apt-repository ppa:gluster/glusterfs-4.0
+sudo add-apt-repository ppa:gluster/glusterfs-6
 sudo apt-get update
 
 
@@ -44,14 +44,15 @@ sudo apt-get update
 	
 	mount -a
 	
-	sudo add-apt-repository ppa:gluster/glusterfs-4.0
-	apt-get update
+#On each Client
+sudo add-apt-repository ppa:gluster/glusterfs-6
+sudo apt-get update
 	
 	mkdir /cputdata
 	apt-get -y install glusterfs-client
 	
 	# In fstab
-#	node1:/CputProVolume /cputdata glusterfs defaults,_netdev 0 0
+#	node1:/cputprovol1 /cputdata glusterfs defaults,_netdev 0 0
 	
 # On each client nodes 
 	mount -t glusterfs Gnode:/cputprovol1 /cputdata
